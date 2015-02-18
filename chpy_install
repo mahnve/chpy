@@ -1,0 +1,17 @@
+VERSION=$1
+PYTHONS_DIR=~/.pythons
+
+curl -o /tmp/python-${VERSION}.tgz https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz
+echo "bddbd64bf6f5344fc55bbe49a72fe4f3 ./python-${VERSION}.tgz"  > /tmp/python-${VERSION}.tgz.md5
+cd /tmp; md5sum /tmp/python-${VERSION}.tgz.md5
+
+tar -xvzf /tmp/python-${VERSION}.tgz -C /tmp
+cd /tmp/Python-${VERSION}/
+./configure --prefix ${PYTHONS_DIR}/${VERSION}
+make
+make install
+
+curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
+
+${PYTHONS_DIR}/${VERSION}/bin/python /tmp/get-pip.py
+${PYTHONS_DIR}/${VERSION}/bin/pip install virtualenv
