@@ -4,6 +4,7 @@ PYTHONS_DIR=~/.pythons
 # Download Python version
 curl -o /tmp/python-${VERSION}.tgz https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz
 
+# Install Python
 tar -xvzf /tmp/python-${VERSION}.tgz -C /tmp
 cd /tmp/Python-${VERSION}/
 ./configure --prefix ${PYTHONS_DIR}/${VERSION}
