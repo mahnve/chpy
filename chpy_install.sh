@@ -1,19 +1,22 @@
-VERSION=$1
-PYTHONS_DIR=~/.pythons
+function chpy_install {
 
-# Download Python version
-curl -o /tmp/python-${VERSION}.tgz https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz
+    VERSION=$1
+    PYTHONS_DIR=~/.pythons
 
-# Install Python
-tar -xvzf /tmp/python-${VERSION}.tgz -C /tmp
-cd /tmp/Python-${VERSION}/
-./configure --prefix ${PYTHONS_DIR}/${VERSION}
-make
-make install
+    # Download Python version
+    curl -o /tmp/python-${VERSION}.tgz https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz
 
-# Install Pip
-curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
-${PYTHONS_DIR}/${VERSION}/bin/python /tmp/get-pip.py
+    # Install Python
+    tar -xvzf /tmp/python-${VERSION}.tgz -C /tmp
+    cd /tmp/Python-${VERSION}/
+    ./configure --prefix ${PYTHONS_DIR}/${VERSION}
+    make
+    make install
 
-# Install virtualenv
-${PYTHONS_DIR}/${VERSION}/bin/pip install virtualenv
+    # Install Pip
+    curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
+    ${PYTHONS_DIR}/${VERSION}/bin/python /tmp/get-pip.py
+
+    # Install virtualenv
+    ${PYTHONS_DIR}/${VERSION}/bin/pip install virtualenv
+}
