@@ -1,9 +1,8 @@
 VERSION=$1
 PYTHONS_DIR=~/.pythons
 
+# Download Python version
 curl -o /tmp/python-${VERSION}.tgz https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz
-echo "bddbd64bf6f5344fc55bbe49a72fe4f3 ./python-${VERSION}.tgz"  > /tmp/python-${VERSION}.tgz.md5
-cd /tmp; md5sum /tmp/python-${VERSION}.tgz.md5
 
 tar -xvzf /tmp/python-${VERSION}.tgz -C /tmp
 cd /tmp/Python-${VERSION}/
@@ -11,7 +10,9 @@ cd /tmp/Python-${VERSION}/
 make
 make install
 
+# Install Pip
 curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
-
 ${PYTHONS_DIR}/${VERSION}/bin/python /tmp/get-pip.py
+
+# Install virtualenv
 ${PYTHONS_DIR}/${VERSION}/bin/pip install virtualenv
