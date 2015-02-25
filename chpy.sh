@@ -20,6 +20,3 @@ function chpy {
     export PATH=$(chpy_bin_path):${PATH}
 }
 
-function chpy_reset {
-    # TODO
-}
