@@ -1,24 +1,37 @@
 #!/usr/bin/env bash
 
+
 function chpy_bin_path {
     echo "${PYTHONS_DIR}/${CURRENT_CHPY_VERSION}/bin"
 }
 
 function chpy {
-    NEW_CHPY_VERSION=$1
     PYTHONS_DIR="${HOME}/.pythons"
-    mkdir -p ${PYTHONS_DIR}/chpy
-    CURRENT_CHPY_FILE=${HOME}/.pythons/chpy/current
-
-    if [ -e ${CURRENT_CHPY_FILE} ]
+    INSTALLED_PYTHONS=$(find ${PYTHONS_DIR} -maxdepth 1 -type d  | sed 's/.*pythons\///g' |  grep '[0-9].[0-9].[0-9]')
+    NEW_CHPY_VERSION=$1
+    if [[ ${INSTALLED_PYTHONS} =~ ${NEW_CHPY_VERSION} ]]
     then
-        CURRENT_CHPY_VERSION=$(cat ${CURRENT_CHPY_FILE})
-        PATH=$(echo $PATH | sed 's^'$(chpy_bin_path):'^^g')
-    fi
+        mkdir -p ${PYTHONS_DIR}/chpy
+        CURRENT_CHPY_FILE=${HOME}/.pythons/chpy/current
 
-    CURRENT_CHPY_VERSION="${NEW_CHPY_VERSION}"
-    echo "${CURRENT_CHPY_VERSION}" > "$CURRENT_CHPY_FILE"
-    export PATH=$(chpy_bin_path):${PATH}
+        if [ -e ${CURRENT_CHPY_FILE} ]
+        then
+            CURRENT_CHPY_VERSION=$(cat ${CURRENT_CHPY_FILE})
+            PATH=$(echo $PATH | sed 's^'$(chpy_bin_path):'^^g')
+        fi
+
+        CURRENT_CHPY_VERSION="${NEW_CHPY_VERSION}"
+        echo "${CURRENT_CHPY_VERSION}" > "$CURRENT_CHPY_FILE"
+        export PATH=$(chpy_bin_path):${PATH}
+        print_current_python
+    else
+        echo "Python ${NEW_CHPY_VERSION} is not installed"
+        print_current_python
+    fi
+}
+
+function print_current_python {
+    echo "Current Python is $(which python)"
 }
 
 function chpy_install {
