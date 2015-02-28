@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-function chpy_bin_path {
+function _chpy_bin_path {
     echo "${PYTHONS_DIR}/${CURRENT_CHPY_VERSION}/bin"
 }
 
@@ -9,7 +9,7 @@ function chpy {
     PYTHONS_DIR="${HOME}/.pythons"
 
     NEW_CHPY_VERSION=$1
-    if [[ "${NEW_CHPY_VERSION}" != "" && $(installed_pythons) =~ ${NEW_CHPY_VERSION} ]]
+    if [[ "${NEW_CHPY_VERSION}" != "" && $(_installed_pythons) =~ ${NEW_CHPY_VERSION} ]]
     then
         mkdir -p ${PYTHONS_DIR}/chpy
         CURRENT_CHPY_FILE=${HOME}/.pythons/chpy/current
@@ -17,31 +17,31 @@ function chpy {
         if [ -e ${CURRENT_CHPY_FILE} ]
         then
             CURRENT_CHPY_VERSION=$(cat ${CURRENT_CHPY_FILE})
-            PATH=$(echo $PATH | sed 's^'$(chpy_bin_path):'^^g')
+            PATH=$(echo $PATH | sed 's^'$(_chpy_bin_path):'^^g')
         fi
 
         CURRENT_CHPY_VERSION="${NEW_CHPY_VERSION}"
         echo "${CURRENT_CHPY_VERSION}" > "$CURRENT_CHPY_FILE"
-        export PATH=$(chpy_bin_path):${PATH}
-        print_current_python
+        export PATH=$(_chpy_bin_path):${PATH}
+        _current_python
         return 0
     else
         echo "Unavailable Python"
-        echo "Installed Pythons:" $(installed_pythons)
-        print_current_python
+        echo "Installed Pythons:" $(_installed_pythons)
+        _current_python
         return 1
     fi
 }
 
-function installed_pythons {
+function _installed_pythons {
     echo $(find ${PYTHONS_DIR} -maxdepth 1 -type d  | sed 's/.*pythons\///g' |  grep '[0-9].[0-9].[0-9]' | sort)
 }
 
-function print_current_python {
+function _current_python {
     echo "Current Python is $(which python)"
 }
 
-function chpy_install {
+function chpy-install {
 
     VERSION=$1
     PYTHONS_DIR=~/.pythons

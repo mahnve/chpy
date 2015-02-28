@@ -5,7 +5,7 @@ Minimal chruby clone for Python. Source the script and use the commands below to
 Example:
 
 ```shell
-chpy_install 2.6.9
+chpy-install 2.6.9
 chpy 2.6.9
 ```
 
