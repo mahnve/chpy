@@ -46,22 +46,36 @@ function chpy_install {
     VERSION=$1
     PYTHONS_DIR=~/.pythons
     CURRENT_DIR=$(pwd)
+    DOWNLOAD_URL="https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz"
+    if [[ "${VERSION}" == "" ]]
+    then
+        echo "Please provide a Python version to install"
+        return 1
+    else
+        TEST=$(curl -s --head ${DOWNLOAD_URL})
+        if [[ "${TEST}" =~ "200 OK" ]]
+        then
+            # Download Python version
+            curl -o /tmp/python-${VERSION}.tgz https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz
 
-    # Download Python version
-    curl -o /tmp/python-${VERSION}.tgz https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz
+            # Install Python
+            tar -xvzf /tmp/python-${VERSION}.tgz -C /tmp
+            cd /tmp/Python-${VERSION}/
+            ./configure --prefix ${PYTHONS_DIR}/${VERSION}
+            make
+            make install
+            cd ${CURRENT_DIR}
 
-    # Install Python
-    tar -xvzf /tmp/python-${VERSION}.tgz -C /tmp
-    cd /tmp/Python-${VERSION}/
-    ./configure --prefix ${PYTHONS_DIR}/${VERSION}
-    make
-    make install
-    cd ${CURRENT_DIR}
+            # Install Pip
+            curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
+            ${PYTHONS_DIR}/${VERSION}/bin/python /tmp/get-pip.py
 
-    # Install Pip
-    curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
-    ${PYTHONS_DIR}/${VERSION}/bin/python /tmp/get-pip.py
-
-    # Install virtualenv
-    ${PYTHONS_DIR}/${VERSION}/bin/pip install virtualenv
+            # Install virtualenv
+            ${PYTHONS_DIR}/${VERSION}/bin/pip install virtualenv
+            return 0
+        else
+            echo "Unavailable Python version"
+            return 2
+        fi
+    fi
 }

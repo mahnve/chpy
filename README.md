@@ -11,6 +11,3 @@ chpy 2.6.9
 
 Changes are made by manipulating PATH for the current session, changes
 are not written to disk.
-
-Currently, if you try to install a non-existent version of python,
-curl will barf on you.
