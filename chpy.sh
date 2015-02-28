@@ -27,7 +27,7 @@ function chpy {
         return 0
     else
         echo "Unavailable Python"
-        echo "Available Pythons:" $(installed_pythons)
+        echo "Installed Pythons:" $(installed_pythons)
         print_current_python
         return 1
     fi
