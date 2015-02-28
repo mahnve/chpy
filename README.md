@@ -1,6 +1,6 @@
 # chpy
 
-Minimal chruby clone for Python. Source the script and use the commands below to install Pythons and change current versions.
+Minimal [chruby](https://github.com/postmodern/chruby) clone for Python. Source the script and use the commands below to install Pythons and change current versions.
 
 Example:
 
