@@ -7,9 +7,9 @@ function chpy_bin_path {
 
 function chpy {
     PYTHONS_DIR="${HOME}/.pythons"
-    INSTALLED_PYTHONS=$(find ${PYTHONS_DIR} -maxdepth 1 -type d  | sed 's/.*pythons\///g' |  grep '[0-9].[0-9].[0-9]')
+
     NEW_CHPY_VERSION=$1
-    if [[ ${INSTALLED_PYTHONS} =~ ${NEW_CHPY_VERSION} ]]
+    if [[ "${NEW_CHPY_VERSION}" != "" && $(installed_pythons) =~ ${NEW_CHPY_VERSION} ]]
     then
         mkdir -p ${PYTHONS_DIR}/chpy
         CURRENT_CHPY_FILE=${HOME}/.pythons/chpy/current
@@ -24,10 +24,17 @@ function chpy {
         echo "${CURRENT_CHPY_VERSION}" > "$CURRENT_CHPY_FILE"
         export PATH=$(chpy_bin_path):${PATH}
         print_current_python
+        return 0
     else
-        echo "Python ${NEW_CHPY_VERSION} is not installed"
+        echo "Unavailable Python"
+        echo "Available Pythons:" $(installed_pythons)
         print_current_python
+        return 1
     fi
+}
+
+function installed_pythons {
+    echo $(find ${PYTHONS_DIR} -maxdepth 1 -type d  | sed 's/.*pythons\///g' |  grep '[0-9].[0-9].[0-9]' | sort)
 }
 
 function print_current_python {
