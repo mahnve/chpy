@@ -11,30 +11,30 @@ function chpy {
     NEW_CHPY_VERSION=$1
     if [[ "${NEW_CHPY_VERSION}" != "" && $(_installed_pythons) =~ ${NEW_CHPY_VERSION} ]]
     then
-        mkdir -p ${PYTHONS_DIR}/chpy
+        mkdir -p "${PYTHONS_DIR}"/chpy
         CURRENT_CHPY_FILE=${HOME}/.pythons/chpy/current
 
-        if [ -e ${CURRENT_CHPY_FILE} ]
+        if [ -e "${CURRENT_CHPY_FILE}" ]
         then
-            CURRENT_CHPY_VERSION=$(cat ${CURRENT_CHPY_FILE})
-            PATH=$(echo $PATH | sed 's^'$(_chpy_bin_path):'^^g')
+            PATH=${PATH/"$(_chpy_bin_path)":\///}
         fi
 
         CURRENT_CHPY_VERSION="${NEW_CHPY_VERSION}"
         echo "${CURRENT_CHPY_VERSION}" > "$CURRENT_CHPY_FILE"
-        export PATH=$(_chpy_bin_path):${PATH}
+        PATH=$(_chpy_bin_path):${PATH}
+        export PATH
         _current_python
         return 0
     else
         echo "Unavailable Python"
-        echo "Installed Pythons:" $(_installed_pythons)
+        echo "Installed Pythons:" "$(_installed_pythons)"
         _current_python
         return 1
     fi
 }
 
 function _installed_pythons {
-    echo $(find ${PYTHONS_DIR} -maxdepth 1 -type d  | sed 's/.*pythons\///g' |  grep '[0-9].[0-9].[0-9]' | sort)
+    find "${PYTHONS_DIR}" -maxdepth 1 -type d  | sed 's/.*pythons\///g' |  grep '[0-9].[0-9].[0-9]' | sort
 }
 
 function _current_python {
@@ -52,26 +52,26 @@ function chpy-install {
         echo "Please provide a Python version to install"
         return 1
     else
-        TEST=$(curl -s --head ${DOWNLOAD_URL})
-        if [[ "${TEST}" =~ "200 OK" ]]
+        TEST=$(curl -s --head "${DOWNLOAD_URL}")
+        if [[ "${TEST}" =~ 200\\sOK ]]
         then
             # Download Python version
-            curl -o /tmp/python-${VERSION}.tgz https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz
+            curl -o "/tmp/python-${VERSION}.tgz" "https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz"
 
             # Install Python
-            tar -xvzf /tmp/python-${VERSION}.tgz -C /tmp
-            cd /tmp/Python-${VERSION}/
-            ./configure --prefix ${PYTHONS_DIR}/${VERSION}
+            tar -xvzf "/tmp/python-${VERSION}.tgz" -C /tmp
+            cd "/tmp/Python-${VERSION}/"
+            ./configure --prefix "${PYTHONS_DIR}/${VERSION}"
             make
             make install
-            cd ${CURRENT_DIR}
+            cd "${CURRENT_DIR}"
 
             # Install Pip
             curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
-            ${PYTHONS_DIR}/${VERSION}/bin/python /tmp/get-pip.py
+            "${PYTHONS_DIR}/${VERSION}"/bin/python /tmp/get-pip.py
 
             # Install virtualenv
-            ${PYTHONS_DIR}/${VERSION}/bin/pip install virtualenv
+            "${PYTHONS_DIR}/${VERSION}"/bin/pip install virtualenv
             return 0
         else
             echo "Unavailable Python version"
