@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 function _chpy_bin_path {
     echo "${PYTHONS_DIR}/${CURRENT_CHPY_VERSION}/bin"
 }
@@ -53,18 +52,18 @@ function chpy-install {
         return 1
     else
         TEST=$(curl -s --head "${DOWNLOAD_URL}")
-        if [[ "${TEST}" =~ 200\\sOK || "${TEST}" =~ "HTTP/1.1 200 OK" ]]
+        if [[ "${TEST}" =~ 200\\sOK || "${TEST}" =~ HTTP\\/1\\.1\\s200\\sOK ]]
         then
             # Download Python version
             curl -o "/tmp/python-${VERSION}.tgz" "https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz"
 
             # Install Python
             tar -xvzf "/tmp/python-${VERSION}.tgz" -C /tmp
-            cd "/tmp/Python-${VERSION}/"
+            cd "/tmp/Python-${VERSION}/" || exit
             ./configure --prefix "${PYTHONS_DIR}/${VERSION}"
             make
             make install
-            cd "${CURRENT_DIR}"
+            cd "${CURRENT_DIR}" || exit
 
             # Install Pip
             curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
