@@ -37,7 +37,7 @@ This can be used in Makefiles like:
 VENV_DIR=venv
 VENV_INSTALLED=${VENV_DIR}/bin/python
 ${VENV_INSTALLED:
-    virtualenv venv
+    virtualenv ${VENV_DIR}
 
 somepythonthing: ${VENV_INSTALLED}
     ${VENV_DIR}/bin/python ... 
