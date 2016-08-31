@@ -4,21 +4,36 @@ function _chpy_bin_path {
     echo "${PYTHONS_DIR}/${CURRENT_CHPY_VERSION}/bin"
 }
 
-function chpy {
+function _reset_path {
+    PATH=${PATH/"$(_chpy_bin_path)":\///}
+    export PATH
+    rm ${CURRENT_CHPY_FILE} -f
+}
+
+function _default_setup {
     PYTHONS_DIR="${HOME}/.pythons"
+    mkdir -p "${PYTHONS_DIR}"/chpy
+    CURRENT_CHPY_FILE=${HOME}/.pythons/chpy/current
+}
 
-    NEW_CHPY_VERSION=$1
-    if [[ "${NEW_CHPY_VERSION}" != "" && $(_installed_pythons) =~ ${NEW_CHPY_VERSION} ]]
+function chpy {
+    _default_setup
+    CHPY_ARG=$1
+    if [[ ${CHPY_ARG} == "reset" ]]
     then
-        mkdir -p "${PYTHONS_DIR}"/chpy
-        CURRENT_CHPY_FILE=${HOME}/.pythons/chpy/current
-
+        _reset_path
+        echo "Python reset to system default"
+        _current_python
+        return 0
+    fi
+    if [[ "${CHPY_ARG}" != "" && $(_installed_pythons) =~ ${CHPY_ARG} ]]
+    then
+        # If we already have set a custom python, unset PATH before setting it again
         if [ -e "${CURRENT_CHPY_FILE}" ]
         then
-            PATH=${PATH/"$(_chpy_bin_path)":\///}
+            _reset_path
         fi
-
-        CURRENT_CHPY_VERSION="${NEW_CHPY_VERSION}"
+        CURRENT_CHPY_VERSION="${CHPY_ARG}"
         echo "${CURRENT_CHPY_VERSION}" > "$CURRENT_CHPY_FILE"
         PATH=$(_chpy_bin_path):${PATH}
         export PATH
@@ -26,8 +41,11 @@ function chpy {
         return 0
     else
         echo "Unavailable Python"
-        echo "Installed Pythons:" "$(_installed_pythons)"
+        echo "Format: chpy <python-version|reset>"
+        echo "Available Python versions:"
+        echo "$(_installed_pythons)"
         _current_python
+        echo "You can install more Pythons with chpy-install"
         return 1
     fi
 }
@@ -48,7 +66,7 @@ function chpy-install {
     DOWNLOAD_URL="https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz"
     if [[ "${VERSION}" == "" ]]
     then
-        echo "Please provide a Python version to install"
+        echo "Please provide a Python version to install, for example 2.7.12"
         return 1
     else
         TEST=$(curl -s --head "${DOWNLOAD_URL}")
