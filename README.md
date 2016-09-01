@@ -13,12 +13,12 @@ source <path to chpy.sh>
 
 ## Usage
 
-Install Python 2.6.9
+Install Python version
 ```shell
 chpy-install 2.6.9
 ```
 
-Use Python 2.6.9
+Use Python version
 ```shell
 chpy 2.6.9
 ```
@@ -33,9 +33,9 @@ chpy reset
 
 Pythons are installed in ~/.pythons and include pip and virtualenv.
 
-Changes are made by manipulating PATH for the current session only, changes to
-PATH are not written to disk - when you start a new terminal you're path is back
-to normal.
+Python selection is made by manipulating PATH for the current session only,
+changes to PATH are not written to disk - when you start a new terminal you're
+path is back to normal.
 
 ## How To Use In Development
 
