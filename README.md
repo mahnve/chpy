@@ -50,15 +50,3 @@ virtualenv venv
 This will setup a virtualenv for the desired Python version. You can then either
 source it manually or from your build tool of choice.
 
-This can be used in Makefiles like:
-
-```Makefile
-VENV_DIR=venv
-VENV_INSTALLED=${VENV_DIR}/bin/python
-${VENV_INSTALLED:
-    virtualenv ${VENV_DIR}
-
-somepythonthing: ${VENV_INSTALLED}
-    ${VENV_DIR}/bin/python ... 
-``` 
-
