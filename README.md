@@ -2,23 +2,33 @@
 
 Minimal [chruby](https://github.com/postmodern/chruby) clone for Python. Source the script and use the commands below to install Pythons and change current versions.
 
-Example:
+## Usage
 
+Install Python 2.6.9
 ```shell
 chpy-install 2.6.9
+```
+
+Use Python 2.6.9
+```shell
 chpy 2.6.9
 ```
 
-To reset to system default: 
+Reset to system default Python: 
 
 ```shell
 chpy reset
 ```
 
+## How It Works 
+
 Pythons are installed in ~/.pythons and include pip and virtualenv.
 
-Changes are made by manipulating PATH for the current session only, changes
-to PATH are not written to disk.
+Changes are made by manipulating PATH for the current session only, changes to
+PATH are not written to disk - when you start a new terminal you're path is back
+to normal.
+
+## How To Use In Development
 
 For development with a specific Python version
 
