@@ -70,7 +70,7 @@ function chpy-install {
         return 1
     else
         TEST=$(curl -s --head "${DOWNLOAD_URL}")
-        if [[ "${TEST}" =~ 200\\sOK || "${TEST}" =~ HTTP\\/1\\.1\\s200\\sOK ]]
+        if [[ "${TEST}" =~ 200 ]]
         then
             # Download Python version
             curl -o "/tmp/python-${VERSION}.tgz" "https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz"
