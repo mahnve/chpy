@@ -50,3 +50,9 @@ virtualenv venv
 This will setup a virtualenv for the desired Python version. You can then either
 source it manually or from your build tool of choice.
 
+## FAQ
+
+### Build breaks with something like "ssl module in Python is not available."
+
+Make sure you have SSL sources available, otherwise Python won't be compiled
+with SSL support, and then the pip install fails. 
