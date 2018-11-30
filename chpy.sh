@@ -83,6 +83,14 @@ function chpy-install {
             make install
             cd "${CURRENT_DIR}" || exit
 
+	    if [ ! -f ${PYTHONS_DIR}/${VERSION}/bin/python ]; then
+		    ln -s ${PYTHONS_DIR}/${VERSION}/bin/python3 ${PYTHONS_DIR}/${VERSION}/bin/python
+	    fi
+
+	    if [ ! -f ${PYTHONS_DIR}/${VERSION}/bin/pip ]; then
+		    ln -s ${PYTHONS_DIR}/${VERSION}/bin/pip3 ${PYTHONS_DIR}/${VERSION}/bin/pip
+	    fi
+
             # Install Pip
             curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
             "${PYTHONS_DIR}/${VERSION}"/bin/python /tmp/get-pip.py
