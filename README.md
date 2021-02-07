@@ -52,7 +52,11 @@ source it manually or from your build tool of choice.
 
 ## FAQ
 
-### Build breaks with something like "ssl module in Python is not available."
+### Build breaks on Ubuntu
 
-Make sure you have SSL sources available, otherwise Python won't be compiled
-with SSL support, and then the pip install fails. 
+You most probably need zlib and ssl: 
+
+```
+apt install libssl-dev zlib1g-dev
+```
+
